@@ -1,5 +1,5 @@
 
-# How to create a read only user in Postgres in 3 Steps:
+# Create a read only user in Postgres in 3 easy steps:
 
 ### Harden your default installation:
 
