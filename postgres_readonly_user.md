@@ -10,6 +10,13 @@
 
 These commands will remove the default access granted by the "PUBLIC" role. Now, you can grant access to individual roles.
 
+### Begin by revoking all accesses to the role <readonly_user>
+
+```sql
+    1. REVOKE ALL ON DATABASE <db_name> FROM <readonly_user>;
+    2. REVOKE ALL ON SCHEMA public FROM <readonly_user>;
+```
+
 ### Provide (read-only) access to existing tables in a database/schema:
     
 These commands assume that the tables in are in the 'public' schema.
@@ -18,8 +25,9 @@ These commands assume that the tables in are in the 'public' schema.
     1. GRANT CONNECT ON DATABASE <db_name> TO <readonly_user>;
     2. GRANT USAGE ON SCHEMA public TO <readonly_user>;
     3. GRANT SELECT ON ALL TABLES IN SCHEMA public TO <readonly_user>;
-    4. GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO <readonly_user>;
-    5. GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO <readonly_user>;
+    4. REVOKE DELETE ON ALL TABLES IN SCHEMA public FROM <readonly_user>;
+    5. GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO <readonly_user>;
+    6. GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO <readonly_user>;
 ```
 
 ### Provide default read-only access for newly created tables/sequences/functions:
@@ -28,6 +36,11 @@ These commands assume that the tables in are in the 'public' schema.
     1. ALTER DEFAULT PRIVILEGES FOR USER <readonly_user> IN SCHEMA public GRANT SELECT ON TABLES TO <readonly_user>;
     2. ALTER DEFAULT PRIVILEGES FOR USER <readonly_user> IN SCHEMA public GRANT SELECT ON SEQUENCES TO <readonly_user>;
     3. ALTER DEFAULT PRIVILEGES FOR USER <readonly_user> IN SCHEMA public GRANT EXECUTE ON FUNCTIONS TO <readonly_user>;
+```
+### Finally, revoke DELETE privileges 
+
+```sql
+    1. REVOKE GRANT OPTION FOR DELETE ON ALL TABLES IN SCHEMA public FROM shoql_client CASCADE ;
 ```
 
 #### Original reference: [Managing rights in postgresql][1]
